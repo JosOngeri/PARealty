@@ -100,6 +100,15 @@ Located in a prime area with easy access to shopping malls, restaurants, interna
   }
 };
 
+export async function generateStaticParams() {
+  // Return sample property IDs for static generation
+  return [
+    { id: '1' },
+    { id: '2' },
+    { id: '3' },
+  ];
+}
+
 export default function PropertyDetailPage() {
   const params = useParams();
   const [property] = useState<Property>(sampleProperty);
