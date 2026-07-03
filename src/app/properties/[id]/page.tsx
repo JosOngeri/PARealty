@@ -1,7 +1,3 @@
-'use client';
-
-import { useState } from 'react';
-import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import Navbar from '@/components/layout/Navbar';
 import Footer from '@/components/layout/Footer';
@@ -100,21 +96,8 @@ Located in a prime area with easy access to shopping malls, restaurants, interna
   }
 };
 
-export async function generateStaticParams() {
-  // Return sample property IDs for static generation
-  return [
-    { id: '1' },
-    { id: '2' },
-    { id: '3' },
-  ];
-}
-
 export default function PropertyDetailPage() {
-  const params = useParams();
-  const [property] = useState<Property>(sampleProperty);
-  const [inquiry, setInquiry] = useState({ name: '', email: '', phone: '', message: '' });
-  const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const property = sampleProperty;
 
   const formatPrice = (price: number, currency: string) => {
     return new Intl.NumberFormat('en-KE', {
@@ -122,17 +105,6 @@ export default function PropertyDetailPage() {
       currency: currency || 'KES',
       maximumFractionDigits: 0,
     }).format(price);
-  };
-
-  const handleInquiry = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitting(true);
-    // Simulate form submission
-    setTimeout(() => {
-      setSubmitted(true);
-      setInquiry({ name: '', email: '', phone: '', message: '' });
-      setSubmitting(false);
-    }, 1000);
   };
 
   return (
@@ -300,52 +272,15 @@ export default function PropertyDetailPage() {
               {/* Inquiry Form */}
               <div className="bg-white rounded-xl shadow-sm p-6">
                 <h3 className="font-semibold text-gray-900 mb-4">Send Inquiry</h3>
-                {submitted ? (
-                  <div className="bg-green-50 border border-green-200 text-green-700 p-4 rounded-lg text-center">
-                    Thank you! Your inquiry has been sent.
-                  </div>
-                ) : (
-                  <form onSubmit={handleInquiry} className="space-y-4">
-                    <input
-                      type="text"
-                      placeholder="Your name"
-                      value={inquiry.name}
-                      onChange={(e) => setInquiry({ ...inquiry, name: e.target.value })}
-                      required
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-                    />
-                    <input
-                      type="email"
-                      placeholder="Your email"
-                      value={inquiry.email}
-                      onChange={(e) => setInquiry({ ...inquiry, email: e.target.value })}
-                      required
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-                    />
-                    <input
-                      type="tel"
-                      placeholder="Your phone"
-                      value={inquiry.phone}
-                      onChange={(e) => setInquiry({ ...inquiry, phone: e.target.value })}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent"
-                    />
-                    <textarea
-                      placeholder="Your message"
-                      value={inquiry.message}
-                      onChange={(e) => setInquiry({ ...inquiry, message: e.target.value })}
-                      rows={4}
-                      required
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent resize-none"
-                    />
-                    <button
-                      type="submit"
-                      disabled={submitting}
-                      className="w-full bg-emerald-600 hover:bg-emerald-700 disabled:opacity-60 text-white px-4 py-2 rounded-lg transition-colors"
-                    >
-                      {submitting ? 'Sending...' : 'Send Inquiry'}
-                    </button>
-                  </form>
-                )}
+                <p className="text-sm text-gray-600 mb-4">
+                  Interested in this property? Contact us for more information or to schedule a viewing.
+                </p>
+                <a
+                  href={`mailto:${property.agent?.email || 'info@plotnest.com'}?subject=Inquiry about ${property.title}`}
+                  className="block w-full bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-center transition-colors"
+                >
+                  Send Email Inquiry
+                </a>
               </div>
             </div>
           </div>
